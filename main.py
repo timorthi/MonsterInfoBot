@@ -70,9 +70,10 @@ def check_scores():
 		if post.score<=(-1):
 			post.delete()
 			print 'Post deleted.'
-			sleep(2)
-	print '..done'
-	sleep(2)
+			time.sleep(2)
+		print '..done'
+	time.sleep(2)
+		
 
 
 #############
@@ -115,7 +116,7 @@ while True:
 							else:
 								reply_string += item+'\n'
 						
-						comment.reply("**[" + name_hyphen.title() + "](http://www.kiranico.com/monster/" + name_hyphen.lower() + ")**  \n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Will delete post if score is below 0.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
+						comment.reply("**[" + name_hyphen.title() + "](http://www.kiranico.com/monster/" + name_hyphen.lower() + ")**  \n\n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Will delete post if score is below 0.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
 						print "Replied."
 						with open('commentid.txt', 'a') as idfile:
 							idfile.write(comment.id+'\n')
@@ -149,7 +150,7 @@ while True:
 							else:
 								reply_string += item+'\n'
 			
-						comment.reply("**[" + name.title() + "](http://www.kiranico.com/monster/" + name.lower() + ")**  \n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Will delete post if score is below 0.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
+						comment.reply("**[" + name.title() + "](http://www.kiranico.com/monster/" + name.lower() + ")**  \n\n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Will delete post if score is below 0.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
 						print "Replied."
 						with open('commentid.txt', 'a') as idfile:
 							idfile.write(comment.id+'\n')
@@ -170,7 +171,7 @@ while True:
 			else:
 					#Comment has no match
 					if comment.id not in idList and comment.author.name not in ["MonsterInfoBot", "xozzo"]:
-						print 'Could not find any matching comments. Trying again..'
+						print 'Could not find match in comment. Trying next comment..'
 						
 						with open('commentid.txt', 'a') as idfile:
 							idfile.write(comment.id+'\n')
@@ -179,16 +180,17 @@ while True:
 						
 					#Comment has already been processed
 					elif comment.id in idList:
-						print 'Comment already in ID list. Trying again..'
+						print 'Comment already in ID list. Trying next comment..'
 						time.sleep(2)
 						continue
 					
 					#Everything else basically	
 					else:
-						print 'No more new comments. Trying again..'
+						print 'Comment invalid. Probably is a post by MonsterInfoBot or xozzo. Trying next comment..'
 						time.sleep(2)
 						continue
 						
 	#TODO: Catching all exceptions is a faux-pas. Rewrite this!
 	except Exception as e:
+		print 'Exception raised. Terminating program.'
 		sys.exit()
