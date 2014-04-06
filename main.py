@@ -32,9 +32,10 @@ with open('bigmonster.txt', 'r') as monsternames:
 # END CONFIG
 ##############
 
-def get_info(monstername): #Always pass a lowercase argument to this method - Kiranico's analytics will go crazy otherwise
+def get_info(monstername): 
 	while True:
 		try:
+			monstername = monstername.lower() # must be lowercase or Kiranico's analytics goes crazy
 			text = []
 			print 'Getting source code from Kiranico..'
 			site = 'http://www.kiranico.com/monster/%s' % monstername
