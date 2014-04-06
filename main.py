@@ -92,7 +92,7 @@ while True:
 					name_hyphen = searchObjectWithHyphen.group(1)
 					
 					if name_hyphen.lower() in monsterList:
-						print "Found match to monster list and obtained table."
+						print "Found match to monster list."
 						get_info(name_hyphen.lower())
 						
 						for item in text:
@@ -122,11 +122,11 @@ while True:
 			
 			#match to @name
 			elif searchObject and comment.id not in idList and comment.author.name not in ["MonsterInfoBot"]:
-					print 'searchObject found'
+					print 'searchObject found.'
 					name = searchObject.group(1)
 					
 					if name.lower() in monsterList:
-						print "Found match to monster list and obtained table."
+						print "Found match to monster list."
 						get_info(name.lower())
 						
 						for item in text:
