@@ -74,6 +74,13 @@ def check_scores():
 		print '..done'
 	time.sleep(2)
 		
+def logInvalidMonster(comment, name):
+	print "Invalid monster name. String entered: " + name
+	with open('commentid.txt', 'a') as idfile:
+		idfile.write(comment.id+'\n')
+	print "Comment ID stored."
+	print "Sleeping for 30 seconds, starting %s" % datetime.datetime.now().time()
+	time.sleep(30)				
 
 
 #############
@@ -123,15 +130,9 @@ while True:
 						print "Comment ID stored."
 						print "Sleeping for 2 minutes, starting %s" % datetime.datetime.now().time()
 						time.sleep(120)
-						continue
-						
+						continue						
 					else:
-						print "Invalid monster name. String entered: " + name_hyphen
-						with open('commentid.txt', 'a') as idfile:
-							idfile.write(comment.id+'\n')
-						print "Comment ID stored."
-						print "Sleeping for 30 seconds, starting %s" % datetime.datetime.now().time()
-						time.sleep(30)
+						logInvalidMonster(comment, name)
 						continue
 			
 			#match to @name
@@ -157,15 +158,9 @@ while True:
 						print "Comment ID stored."
 						print "Sleeping for 2 minutes, starting %s" % datetime.datetime.now().time()
 						time.sleep(120)
-						continue
-						
+						continue						
 					else:
-						print "Invalid monster name. String entered: " + name
-						with open('commentid.txt', 'a') as idfile:
-							idfile.write(comment.id+'\n')
-						print "Comment ID stored."
-						print "Sleeping for 30 seconds, starting %s" % datetime.datetime.now().time()
-						time.sleep(30)
+						logInvalidMonster(comment, name)
 						continue
 						
 			else:
