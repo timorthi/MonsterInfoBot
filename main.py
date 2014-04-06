@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-import praw, re, time, datetime, urllib2
+import praw, re, time, datetime, urllib2, sys
 
 ##########
 # CONFIG
@@ -67,7 +67,7 @@ def check_scores():
 	me = reddit.get_redditor(bot_user)
 	myComments = me.get_comments(limit=50)
 	for post in myComments:
-		if post.score <= (-1):
+		if post.score<=(-1):
 			post.delete()
 			print 'Post deleted.'
 			sleep(2)
