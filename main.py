@@ -74,6 +74,25 @@ def check_scores():
 			time.sleep(2)
 		print '..done'
 	time.sleep(2)
+
+def reply_with_table(commennt, name):
+	print "Found match to monster list."
+	monster_info = get_info(name.lower())
+	
+	for item in monster_info:
+		if item == monster_info[0]:
+			reply_string += item+'\n'
+			reply_string += "|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|\n"
+		else:
+			reply_string += item+'\n'
+
+	comment.reply("**[" + name.title() + "](http://www.kiranico.com/monster/" + name.lower() + ")**  \n\n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Will delete post if score is below 0.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
+	print "Replied."
+	with open('commentid.txt', 'a') as idfile:
+		idfile.write(comment.id+'\n')
+	print "Comment ID stored."
+	print "Sleeping for 2 minutes, starting %s" % datetime.datetime.now().time()
+	time.sleep(120)
 		
 def logInvalidMonster(comment, name):
 	print "Invalid monster name. String entered: " + name
@@ -113,23 +132,7 @@ while True:
 					name_hyphen = searchObjectWithHyphen.group(1)
 					
 					if name_hyphen.lower() in monsterList:
-						print "Found match to monster list."
-						monster_info = get_info(name_hyphen.lower())
-						
-						for item in monster_info:
-							if item == monster_info[0]:
-								reply_string += item+'\n'
-								reply_string += "|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|\n"
-							else:
-								reply_string += item+'\n'
-						
-						comment.reply("**[" + name_hyphen.title() + "](http://www.kiranico.com/monster/" + name_hyphen.lower() + ")**  \n\n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Will delete post if score is below 0.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
-						print "Replied."
-						with open('commentid.txt', 'a') as idfile:
-							idfile.write(comment.id+'\n')
-						print "Comment ID stored."
-						print "Sleeping for 2 minutes, starting %s" % datetime.datetime.now().time()
-						time.sleep(120)
+						reply_with_table(comment, name_hyphen)
 						continue						
 					else:
 						logInvalidMonster(comment, name)
@@ -141,23 +144,7 @@ while True:
 					name = searchObject.group(1)
 					
 					if name.lower() in monsterList:
-						print "Found match to monster list."
-						monster_info = get_info(name.lower())
-						
-						for item in monster_info:
-							if item == monster_info[0]:
-								reply_string += item+'\n'
-								reply_string += "|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|\n"
-							else:
-								reply_string += item+'\n'
-			
-						comment.reply("**[" + name.title() + "](http://www.kiranico.com/monster/" + name.lower() + ")**  \n\n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Will delete post if score is below 0.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
-						print "Replied."
-						with open('commentid.txt', 'a') as idfile:
-							idfile.write(comment.id+'\n')
-						print "Comment ID stored."
-						print "Sleeping for 2 minutes, starting %s" % datetime.datetime.now().time()
-						time.sleep(120)
+						reply_with_table(comment, name)
 						continue						
 					else:
 						logInvalidMonster(comment, name)
