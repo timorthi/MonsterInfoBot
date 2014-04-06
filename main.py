@@ -75,7 +75,7 @@ def check_scores():
 		print '..done'
 	time.sleep(2)
 
-def reply_with_table(commennt, name):
+def reply_with_table(comment, name):
 	print "Found match to monster list."
 	reply_string = ''
 	monster_info = get_info(name.lower())
