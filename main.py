@@ -73,7 +73,7 @@ def check_scores():
 			post.delete()
 			print 'Post deleted.'
 			time.sleep(2)
-		print '..done'
+	print '..done'
 	time.sleep(2)
 
 def find_tagged_monster_name(comment):
