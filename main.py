@@ -19,8 +19,8 @@ user_agent = (
 
 reddit = praw.Reddit(user_agent = user_agent)
 
-bot_user = raw_input("Bot Username?\n> ")
-bot_pass = raw_input("Bot Password?\n> ")
+bot_user = raw_input("Bot user?\n> ")
+bot_pass = raw_input("Bot password?\n> ")
 print "Logging in.."
 reddit.login(bot_user, bot_pass)
 print "Successfully logged in as %s" % bot_user
@@ -61,7 +61,19 @@ def get_info(monstername): #Always pass a lowercase argument to this method - Ki
 			print 'HTTPError raised. Could not get site source. Trying again in 5 minutes..'
 			time.sleep(300)
 			continue
-		
+			
+def check_scores():
+	print 'Checking scores..'
+	me = reddit.get_redditor(bot_user)
+	myComments = me.get_comments(limit=50)
+	for post in myComments:
+		if post.score <= (-1):
+			post.delete()
+			print 'Post deleted.'
+			sleep(2)
+	print '..done'
+	sleep(2)
+
 
 #############
 # MAIN LOOP
@@ -70,6 +82,7 @@ def get_info(monstername): #Always pass a lowercase argument to this method - Ki
 while True:
 	try:
 		#Fellow programmers - do NOT run this bot in /r/MonsterHunter: /u/MonsterInfoBot is already running!
+		check_scores()
 		comments_generator = reddit.get_subreddit('test').get_comments(limit = 100)
 		print 'New comment generator fetched.'
 		
@@ -102,7 +115,7 @@ while True:
 							else:
 								reply_string += item+'\n'
 						
-						comment.reply("**[" + name_hyphen.title() + "](http://www.kiranico.com/monster/" + name_hyphen.lower() + ")**  \n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
+						comment.reply("**[" + name_hyphen.title() + "](http://www.kiranico.com/monster/" + name_hyphen.lower() + ")**  \n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Will delete post if score is below 0.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
 						print "Replied."
 						with open('commentid.txt', 'a') as idfile:
 							idfile.write(comment.id+'\n')
@@ -136,7 +149,7 @@ while True:
 							else:
 								reply_string += item+'\n'
 			
-						comment.reply("**[" + name.title() + "](http://www.kiranico.com/monster/" + name.lower() + ")**  \n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
+						comment.reply("**[" + name.title() + "](http://www.kiranico.com/monster/" + name.lower() + ")**  \n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Will delete post if score is below 0.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
 						print "Replied."
 						with open('commentid.txt', 'a') as idfile:
 							idfile.write(comment.id+'\n')
