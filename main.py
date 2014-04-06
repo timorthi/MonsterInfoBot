@@ -75,6 +75,15 @@ def check_scores():
 		print '..done'
 	time.sleep(2)
 
+def find_tagged_monster_name(comment):
+	monster_name = '@' + '((?:[a-z][a-zA-Z0-9][a-z0-9_]*))'
+	multi_worded_monster_name = '@' + '(\w+(?:-\w+)+)'
+	searchObject = re.search(monster_name, comment.body, re.IGNORECASE)
+	if (searchObject):
+		return searchObject
+	else:
+		return re.search(multi_worded_monster_name, comment.body, re.IGNORECASE)
+
 def reply_with_table(comment, name):
 	print "Found match to monster list."
 	reply_string = ''
@@ -121,25 +130,9 @@ while True:
 				idList = [line.rstrip() for line in idfile]
 			print 'Initialized/Reinitialized lists and reply string'
 			
-			pattern = '@' + '((?:[a-z][a-zA-Z0-9][a-z0-9_]*))' #variable monster name
-			patternWithHyphen = '@' + '(\w+(?:-\w+)+)' #multiple word monster names
-			searchObject = re.search(pattern, comment.body, re.IGNORECASE)
-			searchObjectWithHyphen = re.search(patternWithHyphen, comment.body, re.IGNORECASE)
+			searchObject = find_tagged_monster_name(comment)
 			
-			#match to @multiple-worded-name
-			if searchObjectWithHyphen and comment.id not in idList and comment.author.name not in ["MonsterInfoBot"]:
-				print 'searchObjectWithHyphen found.'
-				name = searchObjectWithHyphen.group(1).lower()
-				
-				if name in monsterList:
-					reply_with_table(comment, name)
-					continue						
-				else:
-					logInvalidMonster(comment, name)
-					continue
-			
-			#match to @name
-			elif searchObject and comment.id not in idList and comment.author.name not in ["MonsterInfoBot"]:
+			if searchObject and comment.id not in idList and comment.author.name not in ["MonsterInfoBot"]:
 				print 'searchObject found.'
 				name = searchObject.group(1).lower()
 				
