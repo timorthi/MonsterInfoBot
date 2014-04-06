@@ -128,49 +128,49 @@ while True:
 			
 			#match to @multiple-worded-name
 			if searchObjectWithHyphen and comment.id not in idList and comment.author.name not in ["MonsterInfoBot"]:
-					print 'searchObjectWithHyphen found.'
-					name_hyphen = searchObjectWithHyphen.group(1)
-					
-					if name_hyphen.lower() in monsterList:
-						reply_with_table(comment, name_hyphen)
-						continue						
-					else:
-						logInvalidMonster(comment, name)
-						continue
+				print 'searchObjectWithHyphen found.'
+				name_hyphen = searchObjectWithHyphen.group(1)
+				
+				if name_hyphen.lower() in monsterList:
+					reply_with_table(comment, name_hyphen)
+					continue						
+				else:
+					logInvalidMonster(comment, name)
+					continue
 			
 			#match to @name
 			elif searchObject and comment.id not in idList and comment.author.name not in ["MonsterInfoBot"]:
-					print 'searchObject found.'
-					name = searchObject.group(1)
-					
-					if name.lower() in monsterList:
-						reply_with_table(comment, name)
-						continue						
-					else:
-						logInvalidMonster(comment, name)
-						continue
+				print 'searchObject found.'
+				name = searchObject.group(1)
+				
+				if name.lower() in monsterList:
+					reply_with_table(comment, name)
+					continue						
+				else:
+					logInvalidMonster(comment, name)
+					continue
 						
 			else:
-					#Comment has no match
-					if comment.id not in idList and comment.author.name not in ["MonsterInfoBot", "xozzo"]:
-						print 'Could not find match in comment. Trying next comment..'
-						
-						with open('commentid.txt', 'a') as idfile:
-							idfile.write(comment.id+'\n')
-						time.sleep(2)
-						continue
-						
-					#Comment has already been processed
-					elif comment.id in idList:
-						print 'Comment already in ID list. Trying next comment..'
-						time.sleep(2)
-						continue
+				#Comment has no match
+				if comment.id not in idList and comment.author.name not in ["MonsterInfoBot", "xozzo"]:
+					print 'Could not find match in comment. Trying next comment..'
 					
-					#Everything else basically	
-					else:
-						print 'Comment invalid. Probably is a post by MonsterInfoBot or xozzo. Trying next comment..'
-						time.sleep(2)
-						continue
+					with open('commentid.txt', 'a') as idfile:
+						idfile.write(comment.id+'\n')
+					time.sleep(2)
+					continue
+					
+				#Comment has already been processed
+				elif comment.id in idList:
+					print 'Comment already in ID list. Trying next comment..'
+					time.sleep(2)
+					continue
+				
+				#Everything else basically	
+				else:
+					print 'Comment invalid. Probably is a post by MonsterInfoBot or xozzo. Trying next comment..'
+					time.sleep(2)
+					continue
 						
 	#TODO: Catching all exceptions is a faux-pas. Rewrite this!
 	except Exception as e:
