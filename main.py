@@ -94,20 +94,20 @@ def reply_with_table(comment, name):
 
 	comment.reply("**[" + name.title() + "](http://www.kiranico.com/monster/" + name.lower() + ")**  \n\n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Will delete post if score is below 0.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
 	print "Replied."
-	with open('commentid.txt', 'a') as idfile:
-		idfile.write(comment.id+'\n')
-	print "Comment ID stored."
+	logCommentId(comment)
 	print "Sleeping for 2 minutes, starting %s" % datetime.datetime.now().time()
 	time.sleep(120)
 		
 def logInvalidMonster(comment, name):
 	print "Invalid monster name. String entered: " + name
-	with open('commentid.txt', 'a') as idfile:
-		idfile.write(comment.id+'\n')
-	print "Comment ID stored."
+	logCommentId(comment)
 	print "Sleeping for 30 seconds, starting %s" % datetime.datetime.now().time()
 	time.sleep(30)				
 
+def logCommentId(comment):
+	with open('commentid.txt', 'a') as idfile:
+		idfile.write(comment.id+'\n')
+	print "Comment ID stored."
 
 #############
 # MAIN LOOP
@@ -141,9 +141,7 @@ while True:
 				#Comment has no match
 				if comment.id not in idList and comment.author.name not in ["MonsterInfoBot", "xozzo"]:
 					print 'Could not find match in comment. Trying next comment..'
-					
-					with open('commentid.txt', 'a') as idfile:
-						idfile.write(comment.id+'\n')
+					logCommentId(comment)
 					time.sleep(2)
 					
 				#Comment has already been processed
