@@ -137,11 +137,9 @@ while True:
 				name = searchObject.group(1).lower()
 				
 				if name in monsterList:
-					reply_with_table(comment, name)
-					continue						
+					reply_with_table(comment, name)					
 				else:
 					logInvalidMonster(comment, name)
-					continue
 						
 			else:
 				#Comment has no match
@@ -151,19 +149,16 @@ while True:
 					with open('commentid.txt', 'a') as idfile:
 						idfile.write(comment.id+'\n')
 					time.sleep(2)
-					continue
 					
 				#Comment has already been processed
 				elif comment.id in idList:
 					print 'Comment already in ID list. Trying next comment..'
 					time.sleep(2)
-					continue
 				
 				#Everything else basically	
 				else:
 					print 'Comment invalid. Probably is a post by MonsterInfoBot or xozzo. Trying next comment..'
 					time.sleep(2)
-					continue
 						
 	#TODO: Catching all exceptions is a faux-pas. Rewrite this!
 	except Exception as e:
