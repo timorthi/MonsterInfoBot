@@ -77,6 +77,7 @@ def check_scores():
 
 def reply_with_table(commennt, name):
 	print "Found match to monster list."
+	reply_string = ''
 	monster_info = get_info(name.lower())
 	
 	for item in monster_info:
@@ -115,8 +116,7 @@ while True:
 		print 'New comment generator fetched.'
 		
 		for comment in comments_generator:
-			idList = []			
-			reply_string = ''
+			idList = []						
 			with open('commentid.txt', 'r') as idfile:
 				idList = [line.rstrip() for line in idfile]
 			print 'Initialized/Reinitialized lists and reply string'
