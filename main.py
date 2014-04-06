@@ -76,13 +76,8 @@ def check_scores():
 	time.sleep(2)
 
 def find_tagged_monster_name(comment):
-	monster_name = '@' + '((?:[a-z][a-zA-Z0-9][a-z0-9_]*))'
-	multi_worded_monster_name = '@' + '(\w+(?:-\w+)+)'
-	searchObject = re.search(monster_name, comment.body, re.IGNORECASE)
-	if (searchObject):
-		return searchObject
-	else:
-		return re.search(multi_worded_monster_name, comment.body, re.IGNORECASE)
+	monster_name_pattern = '@' + '(?:(\w+(-\w+)?))'
+	return re.search(monster_name_pattern, comment.body, re.IGNORECASE)	
 
 def reply_with_table(comment, name):
 	print "Found match to monster list."
