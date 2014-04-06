@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import praw, re, time, datetime, urllib2, sys
 
 ##########
-# CONFIG
+# CONFIG #
 ##########
 
 hdr = {'User-Agent': 'MonsterInfoBot from Reddit made by /u/xozzo',
@@ -29,13 +29,13 @@ with open('bigmonster.txt', 'r') as monsternames:
 	monsterList = [line.rstrip() for line in monsternames]
 	
 ##############	
-# END CONFIG
+# END CONFIG #
 ##############
 
 def get_info(monstername): 
 	while True:
 		try:
-			monstername = monstername.lower() # must be lowercase or Kiranico's analytics goes crazy
+			monstername = monstername.lower() #must be lowercase or Kiranico's analytics goes crazy
 			text = []
 			print 'Getting source code from Kiranico..'
 			site = 'http://www.kiranico.com/monster/%s' % monstername
@@ -110,7 +110,7 @@ def logCommentId(comment):
 	print "Comment ID stored."
 
 #############
-# MAIN LOOP
+# MAIN LOOP #
 #############
 
 while True:
