@@ -35,6 +35,7 @@ with open('bigmonster.txt', 'r') as monsternames:
 def get_info(monstername): #Always pass a lowercase argument to this method - Kiranico's analytics will go crazy otherwise
 	while True:
 		try:
+			text = []
 			print 'Getting source code from Kiranico..'
 			site = 'http://www.kiranico.com/monster/%s' % monstername
 			request = urllib2.Request(site, headers=hdr) 
@@ -50,7 +51,7 @@ def get_info(monstername): #Always pass a lowercase argument to this method - Ki
 				row = re.sub('\xe2\x80\x94', '-', sub2)
 				row = row[1:-2] #get rid of some of the extra pipes (|) 
 				text.append(row)
-			break
+			return text
 			
 		except urllib2.URLError:
 			print 'URLError raised. Could not get site source. Trying again in 5 minutes..'
@@ -95,8 +96,7 @@ while True:
 		print 'New comment generator fetched.'
 		
 		for comment in comments_generator:
-			idList = []
-			text = []
+			idList = []			
 			reply_string = ''
 			with open('commentid.txt', 'r') as idfile:
 				idList = [line.rstrip() for line in idfile]
@@ -114,10 +114,10 @@ while True:
 					
 					if name_hyphen.lower() in monsterList:
 						print "Found match to monster list."
-						get_info(name_hyphen.lower())
+						monster_info = get_info(name_hyphen.lower())
 						
-						for item in text:
-							if item == text[0]:
+						for item in monster_info:
+							if item == monster_info[0]:
 								reply_string += item+'\n'
 								reply_string += "|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|\n"
 							else:
@@ -142,10 +142,10 @@ while True:
 					
 					if name.lower() in monsterList:
 						print "Found match to monster list."
-						get_info(name.lower())
+						monster_info = get_info(name.lower())
 						
-						for item in text:
-							if item == text[0]:
+						for item in monster_info:
+							if item == monster_info[0]:
 								reply_string += item+'\n'
 								reply_string += "|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|\n"
 							else:
