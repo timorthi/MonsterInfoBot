@@ -102,7 +102,7 @@ while True:
 							else:
 								reply_string += item+'\n'
 						
-						comment.reply(reply_string + "  \n[Source](http://www.kiranico.com/monster/"+name_hyphen.lower()+")  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
+						comment.reply("**[" + name_hyphen.title() + "](http://www.kiranico.com/monster/" + name_hyphen.lower() + ")**  \n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
 						print "Replied."
 						with open('commentid.txt', 'a') as idfile:
 							idfile.write(comment.id+'\n')
@@ -136,7 +136,7 @@ while True:
 							else:
 								reply_string += item+'\n'
 			
-						comment.reply(reply_string + "  \n[Source](http://www.kiranico.com/monster/"+name.lower()+")  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
+						comment.reply("**[" + name.title() + "](http://www.kiranico.com/monster/" + name.lower() + ")**  \n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
 						print "Replied."
 						with open('commentid.txt', 'a') as idfile:
 							idfile.write(comment.id+'\n')
