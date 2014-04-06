@@ -77,7 +77,7 @@ def check_scores():
 	time.sleep(2)
 
 def find_tagged_monster_name(comment):
-	monster_name_pattern = '@' + '(?:(\w+-?\w+?))'
+	monster_name_pattern = '@' + '(?:(\w+-?\w+))'
 	return re.search(monster_name_pattern, comment.body, re.IGNORECASE)	
 
 def reply_with_table(comment, name):
