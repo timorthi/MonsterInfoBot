@@ -129,9 +129,9 @@ while True:
 			#match to @multiple-worded-name
 			if searchObjectWithHyphen and comment.id not in idList and comment.author.name not in ["MonsterInfoBot"]:
 				print 'searchObjectWithHyphen found.'
-				name = searchObjectWithHyphen.group(1)
+				name = searchObjectWithHyphen.group(1).lower()
 				
-				if name.lower() in monsterList:
+				if name in monsterList:
 					reply_with_table(comment, name)
 					continue						
 				else:
@@ -141,9 +141,9 @@ while True:
 			#match to @name
 			elif searchObject and comment.id not in idList and comment.author.name not in ["MonsterInfoBot"]:
 				print 'searchObject found.'
-				name = searchObject.group(1)
+				name = searchObject.group(1).lower()
 				
-				if name.lower() in monsterList:
+				if name in monsterList:
 					reply_with_table(comment, name)
 					continue						
 				else:
