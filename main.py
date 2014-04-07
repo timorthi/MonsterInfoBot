@@ -128,7 +128,7 @@ while True:
 			
 			searchObject = find_tagged_monster_name(comment)
 			
-			if searchObject and comment.id not in idList and comment.author.name not in ["MonsterInfoBot"]:
+			if searchObject and comment.id not in idList and comment.author.name not in ["MonsterInfoBot", bot_user]:
 				print 'searchObject found.'
 				name = searchObject.group(1).lower()
 				
@@ -139,7 +139,7 @@ while True:
 						
 			else:
 				#Comment has no match
-				if comment.id not in idList and comment.author.name not in ["MonsterInfoBot", "xozzo"]:
+				if comment.id not in idList and comment.author.name not in ["MonsterInfoBot", "xozzo", bot_user]:
 					print 'Could not find match in comment. Trying next comment..'
 					logCommentId(comment)
 					time.sleep(2)
