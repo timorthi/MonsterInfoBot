@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import praw, re, time, datetime, urllib2, sys
 
 ##########
-# CONFIG
+# CONFIG #
 ##########
 
 hdr = {'User-Agent': 'MonsterInfoBot from Reddit made by /u/xozzo',
@@ -29,12 +29,14 @@ with open('bigmonster.txt', 'r') as monsternames:
 	monsterList = [line.rstrip() for line in monsternames]
 	
 ##############	
-# END CONFIG
+# END CONFIG #
 ##############
 
-def get_info(monstername): #Always pass a lowercase argument to this method - Kiranico's analytics will go crazy otherwise
+def get_monster_info(monstername): 
 	while True:
 		try:
+			monstername = monstername.lower() #must be lowercase or Kiranico's analytics goes crazy
+			text = []
 			print 'Getting source code from Kiranico..'
 			site = 'http://www.kiranico.com/monster/%s' % monstername
 			request = urllib2.Request(site, headers=hdr) 
@@ -50,7 +52,7 @@ def get_info(monstername): #Always pass a lowercase argument to this method - Ki
 				row = re.sub('\xe2\x80\x94', '-', sub2)
 				row = row[1:-2] #get rid of some of the extra pipes (|) 
 				text.append(row)
-			break
+			return text
 			
 		except urllib2.URLError:
 			print 'URLError raised. Could not get site source. Trying again in 5 minutes..'
@@ -71,13 +73,44 @@ def check_scores():
 			post.delete()
 			print 'Post deleted.'
 			time.sleep(2)
-		print '..done'
+	print '..done'
 	time.sleep(2)
-		
 
+def find_tagged_monster_name(comment):
+	monster_name_pattern = '@' + '(?:(\w+-?\w+))'
+	return re.search(monster_name_pattern, comment.body, re.IGNORECASE)	
+
+def reply_with_table(comment, name):
+	print "Found match to monster list."
+	reply_string = ''
+	monster_info = get_monster_info(name.lower())
+	
+	for item in monster_info:
+		if item == monster_info[0]:
+			reply_string += item+'\n'
+			reply_string += "|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|\n"
+		else:
+			reply_string += item+'\n'
+
+	comment.reply("**[" + name.title() + "](http://www.kiranico.com/monster/" + name.lower() + ")**  \n\n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Will delete post if score is below 0.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
+	print "Replied."
+	logCommentId(comment)
+	print "Sleeping for 2 minutes, starting %s" % datetime.datetime.now().time()
+	time.sleep(120)
+		
+def logInvalidMonster(comment, name):
+	print "Invalid monster name. String entered: " + name
+	logCommentId(comment)
+	print "Sleeping for 30 seconds, starting %s" % datetime.datetime.now().time()
+	time.sleep(30)				
+
+def logCommentId(comment):
+	with open('commentid.txt', 'a') as idfile:
+		idfile.write(comment.id+'\n')
+	print "Comment ID stored."
 
 #############
-# MAIN LOOP
+# MAIN LOOP #
 #############
 
 while True:
@@ -88,107 +121,38 @@ while True:
 		print 'New comment generator fetched.'
 		
 		for comment in comments_generator:
-			idList = []
-			text = []
-			reply_string = ''
+			idList = []						
 			with open('commentid.txt', 'r') as idfile:
 				idList = [line.rstrip() for line in idfile]
 			print 'Initialized/Reinitialized lists and reply string'
 			
-			pattern = '@' + '((?:[a-z][a-zA-Z0-9][a-z0-9_]*))' #variable monster name
-			patternWithHyphen = '@' + '(\w+(?:-\w+)+)' #multiple word monster names
-			searchObject = re.search(pattern, comment.body, re.IGNORECASE)
-			searchObjectWithHyphen = re.search(patternWithHyphen, comment.body, re.IGNORECASE)
+			searchObject = find_tagged_monster_name(comment)
 			
-			#match to @multiple-worded-name
-			if searchObjectWithHyphen and comment.id not in idList and comment.author.name not in ["MonsterInfoBot"]:
-					print 'searchObjectWithHyphen found.'
-					name_hyphen = searchObjectWithHyphen.group(1)
-					
-					if name_hyphen.lower() in monsterList:
-						print "Found match to monster list."
-						get_info(name_hyphen.lower())
-						
-						for item in text:
-							if item == text[0]:
-								reply_string += item+'\n'
-								reply_string += "|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|\n"
-							else:
-								reply_string += item+'\n'
-						
-						comment.reply("**[" + name_hyphen.title() + "](http://www.kiranico.com/monster/" + name_hyphen.lower() + ")**  \n\n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Will delete post if score is below 0.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
-						print "Replied."
-						with open('commentid.txt', 'a') as idfile:
-							idfile.write(comment.id+'\n')
-						print "Comment ID stored."
-						print "Sleeping for 2 minutes, starting %s" % datetime.datetime.now().time()
-						time.sleep(120)
-						continue
-						
-					else:
-						print "Invalid monster name. String entered: " + name_hyphen
-						with open('commentid.txt', 'a') as idfile:
-							idfile.write(comment.id+'\n')
-						print "Comment ID stored."
-						print "Sleeping for 30 seconds, starting %s" % datetime.datetime.now().time()
-						time.sleep(30)
-						continue
-			
-			#match to @name
-			elif searchObject and comment.id not in idList and comment.author.name not in ["MonsterInfoBot"]:
-					print 'searchObject found.'
-					name = searchObject.group(1)
-					
-					if name.lower() in monsterList:
-						print "Found match to monster list."
-						get_info(name.lower())
-						
-						for item in text:
-							if item == text[0]:
-								reply_string += item+'\n'
-								reply_string += "|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|\n"
-							else:
-								reply_string += item+'\n'
-			
-						comment.reply("**[" + name.title() + "](http://www.kiranico.com/monster/" + name.lower() + ")**  \n\n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Will delete post if score is below 0.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
-						print "Replied."
-						with open('commentid.txt', 'a') as idfile:
-							idfile.write(comment.id+'\n')
-						print "Comment ID stored."
-						print "Sleeping for 2 minutes, starting %s" % datetime.datetime.now().time()
-						time.sleep(120)
-						continue
-						
-					else:
-						print "Invalid monster name. String entered: " + name
-						with open('commentid.txt', 'a') as idfile:
-							idfile.write(comment.id+'\n')
-						print "Comment ID stored."
-						print "Sleeping for 30 seconds, starting %s" % datetime.datetime.now().time()
-						time.sleep(30)
-						continue
+			if searchObject and comment.id not in idList and comment.author.name not in ["MonsterInfoBot", bot_user]:
+				print 'searchObject found.'
+				name = searchObject.group(1).lower()
+				
+				if name in monsterList:
+					reply_with_table(comment, name)					
+				else:
+					logInvalidMonster(comment, name)
 						
 			else:
-					#Comment has no match
-					if comment.id not in idList and comment.author.name not in ["MonsterInfoBot", "xozzo"]:
-						print 'Could not find match in comment. Trying next comment..'
-						
-						with open('commentid.txt', 'a') as idfile:
-							idfile.write(comment.id+'\n')
-						time.sleep(2)
-						continue
-						
-					#Comment has already been processed
-					elif comment.id in idList:
-						print 'Comment already in ID list. Trying next comment..'
-						time.sleep(2)
-						continue
+				#Comment has no match
+				if comment.id not in idList and comment.author.name not in ["MonsterInfoBot", "xozzo", bot_user]:
+					print 'Could not find match in comment. Trying next comment..'
+					logCommentId(comment)
+					time.sleep(2)
 					
-					#Everything else basically	
-					else:
-						print 'Comment invalid. Probably is a post by MonsterInfoBot or xozzo. Trying next comment..'
-						time.sleep(2)
-						continue
+				#Comment has already been processed
+				elif comment.id in idList:
+					print 'Comment already in ID list. Trying next comment..'
+					time.sleep(2)
+				
+				#Everything else basically	
+				else:
+					print 'Comment invalid. Probably is a post by MonsterInfoBot or xozzo. Trying next comment..'
+					time.sleep(2)
 						
 	#TODO: Catching all exceptions is a faux-pas. Rewrite this!
 	except Exception as e:
