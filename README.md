@@ -10,8 +10,13 @@ There is no need for you to edit `bigmonster.txt` and `commentid.txt`.
 
 Changelog
 ===============
-4.6.14  
-- Added functionality where bot deletes post if comment score <=-1.
+**4.6.14**  
+- Added functionality where bot deletes post if comment score <=-1.  
+
+**4.8.14**  
+Merged pull request by @icbat:  
+- Factoring out code and placed them into functions
+- Prepping code for implementation of new functions
 
 Running locally
 ===============
@@ -31,3 +36,7 @@ To Do
 - I should probably host the bot online, but since this is only the early stages of the bot, I guess it's alright to host it on my computer for the time being. My computer is on 24/7. I can't guarantee the same for internet.
 - Selective information posting? e.g. @Alatreon^carves gets carve list; @Alatreon^damage gets damage chart.
 - Possibly implement a 'Related' link to posts, sort of like how /u/autowikibot does it.  
+
+Contributors
+===============
+icbat
