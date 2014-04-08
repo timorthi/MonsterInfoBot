@@ -5,7 +5,8 @@ A reddit bot for /r/MonsterHunter that filters comments for @monster-names and f
 
 **There is already an instance of the bot running in /r/MonsterHunter. If you want to test it, use /r/test instead. The code uses /r/test by default.**  
 
-There is no need for you to edit `bigmonster.txt` and `commentid.txt`.  
+There is no need for you to edit `bigmonster.txt` and `commentid.txt`:  
+`bigmonster.txt` is just a storage for the list of monsters for the comments to be cross-checked against; `commentid.txt` stores the proccessed comment IDs.
 
 
 Changelog
@@ -16,7 +17,9 @@ Changelog
 **4.8.14**  
 Merged pull request by @icbat:  
 - Factoring out code and placed them into functions
-- Prepping code for implementation of new functions
+- Prepping code for implementation of new functions  
+
+- Creates commentid.txt if not found in local directory.
 
 Running locally
 ===============
