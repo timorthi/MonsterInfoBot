@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-import praw, re, time, datetime, urllib2, sys
+import praw, re, time, datetime, urllib2, sys, os
 
 ##########
 # CONFIG #
@@ -79,6 +79,18 @@ def check_scores():
 def find_tagged_monster_name(comment):
 	monster_name_pattern = '@' + '(?:(\w+-?\w+))'
 	return re.search(monster_name_pattern, comment.body, re.IGNORECASE)	
+	
+def logCommentId(comment):
+	if os.path.isfile('commentid.txt'):
+		with open('commentid.txt', 'a') as idfile:
+			idfile.write(comment.id+'\n')
+		print "Comment ID stored."
+	else:
+		open('commentid.txt', 'w').close()
+		print 'commentid.txt could not be found. File created.'
+		with open('commentid.txt', 'a') as idfile:
+			idfile.write(comment.id+'\n')
+		print "Comment ID stored."
 
 def reply_with_table(comment, name):
 	print "Found match to monster list."
@@ -103,11 +115,6 @@ def logInvalidMonster(comment, name):
 	logCommentId(comment)
 	print "Sleeping for 30 seconds, starting %s" % datetime.datetime.now().time()
 	time.sleep(30)				
-
-def logCommentId(comment):
-	with open('commentid.txt', 'a') as idfile:
-		idfile.write(comment.id+'\n')
-	print "Comment ID stored."
 
 #############
 # MAIN LOOP #
