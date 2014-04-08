@@ -32,7 +32,7 @@ with open('bigmonster.txt', 'r') as monsternames:
 # END CONFIG #
 ##############
 
-def get_info(monstername): 
+def get_monster_info(monstername): 
 	while True:
 		try:
 			monstername = monstername.lower() #must be lowercase or Kiranico's analytics goes crazy
@@ -83,7 +83,7 @@ def find_tagged_monster_name(comment):
 def reply_with_table(comment, name):
 	print "Found match to monster list."
 	reply_string = ''
-	monster_info = get_info(name.lower())
+	monster_info = get_monster_info(name.lower())
 	
 	for item in monster_info:
 		if item == monster_info[0]:
