@@ -41,7 +41,7 @@ def login():
 			TryingLogin = False
 			
 		except praw.errors.InvalidUserPass:
-			print 'Password is wrong. Please re-enter username and password.'
+			print 'Username/Password is wrong. Please re-enter username and password.'
 		
 		except Exception as e:
 			if 'ratelimit' in e:
@@ -167,7 +167,7 @@ while True:
 					logInvalidMonster(comment, name)
 						
 			else:
-				#Comment has no match
+				#Comment has no match, or author is bot_user
 				if comment.id not in idList:
 					print 'Could not find match in comment. Trying next comment..'
 					logCommentId(comment)
@@ -177,9 +177,16 @@ while True:
 				elif comment.id in idList:
 					print 'Comment already in ID list. Trying next comment..'
 					time.sleep(2)
-						
+	
+	except urllib2.HTTPError as e:
+		print "Could not connect to Reddit (%s). Sleeping for 3 minutes." % e.code
+		print 'Time: %s' % datetime.datetime.now().time()
+		time.sleep(180)
+		continue
+				
 	#TODO: Catching all exceptions is a faux-pas. Rewrite this!
 	except Exception as e:
-		print 'Exception raised. Terminating program. Error: %s' % e
+		print 'Exception raised. Sleeping for 3 minutes. Error: %s' % e
 		print 'Time: %s' % datetime.datetime.now().time()
-		sys.exit()
+		time.sleep(180)
+		continue
