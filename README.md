@@ -1,13 +1,25 @@
 MonsterInfoBot
-===============
+===============  
+
+**[Reddit Link](http://www.reddit.com/r/MonsterHunter/comments/229ljg/introducing_umonsterinfobot/)**  
 
 A reddit bot for /r/MonsterHunter that filters comments for @monster-names and fetches relevant information from kiranico.com  
 
 **There is already an instance of the bot running in /r/MonsterHunter. If you want to test it, use /r/test instead. The code uses /r/test by default.**  
 
 There is no need for you to edit `bigmonster.txt` and `commentid.txt`:  
-`bigmonster.txt` is just a storage for the list of monsters for the comments to be cross-checked against. Clone this file along with the python file; `commentid.txt` stores the proccessed comment IDs. If the file does not exist, it will create one for you.
+`bigmonster.txt` is just a storage for the list of monsters for the comments to be cross-checked against. Clone this file along with the python file; `commentid.txt` stores the proccessed comment IDs. If the file does not exist, it will create one for you.  
 
+
+Features
+===============  
+- The bot only gives you its damage chart (hitzones and elemental weaknesses) at the moment. See below for future plans.  
+- Use `@` to prefix a monster name in your comment, e.g. `@sand-barioth`, `@lagiacrus`. It's case insensitive.  
+- One monster per comment only. Bot only reads the first '@ word' it sees - even wrong ones.  
+- The bot does not read edited comments.
+- Large monsters only.  
+- This bot only works for MH3U monsters since Kiranico only has information for that game.  
+- The bot deletes any of its posts that has a negative comment score.  
 
 Changelog
 ===============
