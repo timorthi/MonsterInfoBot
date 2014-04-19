@@ -28,6 +28,9 @@ with open('bigmonster.txt', 'r') as monsternames:
 # END CONFIG #
 ##############
 
+#############	
+# FUNCTIONS #
+#############
 def login():
 	TryingLogin = True
 	while TryingLogin:
@@ -45,8 +48,8 @@ def login():
 		
 		except Exception as e:
 			if 'ratelimit' in e:
-				print 'You tried logging in too many times in a short interval. Sleeping for 1 minute..'
-				time.sleep(60)
+				print 'You tried logging in too many times in a short interval. Try again in 45 seconds, from %s' % datetime.datetime.now().time()
+				time.sleep(45)
 			else:
 				print 'Exception: %s. Trying again.' % e
 				time.sleep(2)
@@ -87,7 +90,7 @@ def get_monster_damage(monstername):
 def check_scores():
 	print 'Checking scores..'
 	me = reddit.get_redditor(bot_user)
-	myComments = me.get_comments(limit=50)
+	myComments = me.get_comments(limit=100)
 	for post in myComments:
 		if post.score<=(-1):
 			post.delete()
@@ -134,7 +137,21 @@ def logInvalidMonster(comment, name):
 	print "Name does not exist in monster list. String entered: " + name
 	logCommentId(comment)
 	print "Sleeping for 15 seconds, starting %s" % datetime.datetime.now().time()
-	time.sleep(15)				
+	time.sleep(15)
+	
+def isDuplicate(comment, name):
+	tree = comment.submission.comments
+	flat_tree = praw.helpers.flatten_tree(tree, nested_attr=u'replies', depth_first=False)
+	
+	for comm in flat_tree:
+		subspecies = re.search('(?=(-'+name+'))', comm.body, re.IGNORECASE)
+		if comm.author.name in ["MonsterInfoBot", bot_user] and name in comm.body and comm != comment and not subspecies:
+			return True
+			
+
+#################	
+# END FUNCTIONS #
+#################
 
 #############
 # MAIN LOOP #
@@ -146,23 +163,34 @@ while True:
 	try:
 		check_scores()
 		#Fellow programmers - do NOT run this bot in /r/MonsterHunter: /u/MonsterInfoBot is already running!
-		comments_generator = reddit.get_subreddit('test').get_comments(limit = 150)
+		comments_generator = praw.helpers.comment_stream(reddit, 'test', limit=100, verbosity=1)
+		
 		print 'New comment generator fetched.'
 		
 		for comment in comments_generator:
-			idList = []						
+			idList = []	#this list is reinitialized for every comment
 			with open('commentid.txt', 'r') as idfile:
 				idList = [line.rstrip() for line in idfile]
-			print 'Initialized/Reinitialized ID list'
 			
 			searchObject = find_tagged_monster_name(comment)
 			
 			if searchObject and comment.id not in idList and comment.author.name not in ["MonsterInfoBot", bot_user]:
-				print 'Found word with @ prefix in it.'
+				print 'Found word with @ prefix.'
 				name = searchObject.group(1).lower()
 				
 				if name in monsterList:
-					reply_with_damage_table(comment, name)					
+					isDuplicate(comment, name)
+					
+					if not isDuplicate(comment, name):
+						reply_with_damage_table(comment, name)
+						
+					elif isDuplicate(comment, name):
+						comment.reply("It appears that the information for " + name.title() + " has already been posted somewhere in this thread.  \n\nUse Ctrl+F, or if you're on a Mac, Cmd+F to look for the relevant information.  \n* * *   \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Will delete post if score is below 0.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
+						print 'There is already a post in this submission with this information (' + name + ').'
+						logCommentId(comment)
+						print 'Sleeping for 2 minutes, starting %s' % datetime.datetime.now().time()
+						time.sleep(120)
+									
 				else:
 					logInvalidMonster(comment, name)
 						
@@ -186,7 +214,11 @@ while True:
 				
 	#TODO: Catching all exceptions is a faux-pas. Rewrite this!
 	except Exception as e:
-		print 'Exception raised. Sleeping for 3 minutes. Error: %s' % e
+		print 'Error: %s. Sleeping for 3 minutes.' % e
 		print 'Time: %s' % datetime.datetime.now().time()
 		time.sleep(180)
 		continue
+		
+#################
+# END MAIN LOOP #
+#################
