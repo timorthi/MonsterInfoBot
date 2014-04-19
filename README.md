@@ -10,16 +10,6 @@ A reddit bot for /r/MonsterHunter that filters comments for @monster-names and f
 There is no need for you to edit `bigmonster.txt` and `commentid.txt`:  
 `bigmonster.txt` is just a storage for the list of monsters for the comments to be cross-checked against. Clone this file along with the python file; `commentid.txt` stores the proccessed comment IDs. If the file does not exist, it will create one for you.  
 
-Running Locally  
-===============  
-1. Fork/clone the project.  
-2. Install python 2.6+ (not 3.x).  
-3. Get [pip](http://www.pip-installer.org/en/latest/installing.html) or easy_install.  
-4. Use pip or easy_install to get `beautifulsoup4`.  
-5. Use pip or easy_install to get `praw`.  
-6. Run `python main.py`.  
-7. Do not point to /r/MonsterHunter to prevent duplicate posts!  
-
 Features
 ===============  
 - The bot only gives you its damage chart (hitzones and elemental weaknesses) at the moment. See below for future plans.  
@@ -29,6 +19,16 @@ Features
 - Large monsters only.  
 - The bot only works for MH3U monsters since Kiranico only has information for that game.  
 - The bot deletes any of its posts that has a negative comment score.  
+
+Running Locally  
+===============  
+1. Fork/clone the project.  
+2. Install python 2.6+ (not 3.x).  
+3. Get [pip](http://www.pip-installer.org/en/latest/installing.html) or easy_install.  
+4. Use pip or easy_install to get `beautifulsoup4`.  
+5. Use pip or easy_install to get `praw`.  
+6. Run `python main.py`.  
+7. Do not point to /r/MonsterHunter to prevent duplicate posts!  
 
 Changelog
 ===============
