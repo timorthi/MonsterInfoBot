@@ -7,8 +7,7 @@ A reddit bot for /r/MonsterHunter that filters comments for @monster-names and f
 
 **There is already an instance of the bot running in /r/MonsterHunter. If you want to test it, use /r/test instead. The code uses /r/test by default.**  
 
-There is no need for you to edit `bigmonster.txt` and `commentid.txt`:  
-`bigmonster.txt` is just a storage for the list of monsters for the comments to be cross-checked against. Clone this file along with the python file; `commentid.txt` stores the proccessed comment IDs. If the file does not exist, it will create one for you.  
+There is no need for you to edit `commentid.txt`: it stores the proccessed comment IDs. If it (`commentid.txt`) does not exist, the program will create one for you.  
 
 Features
 ===============  
@@ -19,6 +18,7 @@ Features
 - Large monsters only.  
 - The bot only works for MH3U monsters since Kiranico only has information for that game.  
 - The bot deletes any of its posts that has a negative comment score.  
+- The bot does not post same information twice in the same submission. If there is a duplicate, the bot will post a reply saying so.
 
 Running Locally  
 ===============  
@@ -38,7 +38,7 @@ Changelog
 **4.8.14**  
 - Creates commentid.txt if not found in local directory.  
 
-Merged pull request by @icbat:  
+Merged pull request by icbat:  
 - Factoring out code and placed them into functions
 - Prepping code for implementation of new functions  
 
@@ -50,15 +50,28 @@ Merged pull request by @icbat:
 **4.19.14**
 - Bot no longer replies with duplicate information. 
 - Replaced get_comments with comment_stream.
-- Bot will retry connection if connection to Reddit/Kiranico fails.
+- Bot will retry connection if connection to Reddit/Kiranico fails.  
+
+**4.20.14**  
+Merged pull request by icbat:  
+- Fixed regex problem where it doesn't detect 3 word names.  
+- Created .gitignore.  
+
+**4.24.14**  
+- Reverted back to get_comments from comment_stream as it was interfering with check_scores.  
+- Shortened reply for duplicate posts to prevent page bloat.  
+- Removed bigmonster.txt dependency; monster list is now initialized in program.
 
 To Do
 ===============
-- Code is extremely messy, not even close to PEP8 standard. Gotta clean it up, but I'll save this for when most of the main features are implemented.
 - Host bot online.
 - Selective information posting (carve/drop): Regex is done. Have to work on parsing the page.
 - Update bot comment to include how to summon for carve/drops when feature is done.  
-- Remove the need for a text file to store comment IDs.
+- Remove commentid.txt dependency to store processed comments.
+- Possibly ignore invalid @ names and search the rest of the comment for a valid one?  
+- Explain why there are two values in certain charts.  
+- Add tolerance chart?  
+- Add general tips?  
 
 Contributors
 ===============
