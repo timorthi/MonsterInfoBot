@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import praw, re, time, datetime, urllib2, sys, os
 
-# @((?:\w+-?\w+-[LHG])) : regex for low, high, G rank carves. Syntax: @dire-miralis-G / @barioth-L
+# @([\w-]+[LHG]) : regex for low, high, G rank carves. Syntax: @dire-miralis-G / @barioth-L
 
 ##########
 # CONFIG #
@@ -15,14 +15,21 @@ hdr = {'User-Agent': 'MonsterInfoBot from Reddit made by /u/xozzo',
        'Connection': 'keep-alive'}
 
 user_agent = (
-"Kiranico Monster Information Fetching Bot"
+"MonsterInfoBot for /r/MonsterHunter on Reddit"
 "version 1.0 by /u/xozzo"
 )
 
 reddit = praw.Reddit(user_agent = user_agent)
 
-with open('bigmonster.txt', 'r') as monsternames:
-	monsterList = [line.rstrip() for line in monsternames]
+monsterList = ["great-jaggi", "great-baggi", "great-wroggi", "arzuros", "lagombi", "volvidon", 
+"qurupeco", "crimson-qurupeco", "barroth", "jade-barroth", "uragaan", "steel-uragaan", 
+"duramboros", "rust-duramboros", "rathian", "pink-rathian", "gold-rathian", "rathalos", 
+"azure-rathalos", "silver-rathalos", "diablos", "black-diablos", "gigginox", "baleful-gigginox", 
+"barioth", "sand-barioth", "royal-ludroth", "purple-ludroth", "gobul", "nibelsnarf", "lagiacrus",
+"ivory-lagiacrus", "abyssal-lagiacrus", "agnaktor", "glacial-agnaktor", "nargacuga", 
+"green-nargacuga", "lucent-nargacuga", "zinogre", "stygian-zinogre", "plesioth", "green-plesioth",
+"brachydios", "ceadeus", "goldbeard-ceadeus", "deviljho", "savage-deviljho", "jhen-mohran", 
+"hallowed-jhen-mohran", "alatreon", "dire-miralis"]
 	
 ##############	
 # END CONFIG #
@@ -163,12 +170,12 @@ while True:
 	try:
 		check_scores()
 		#Fellow programmers - do NOT run this bot in /r/MonsterHunter: /u/MonsterInfoBot is already running!
-		comments_generator = praw.helpers.comment_stream(reddit, 'test', limit=100, verbosity=1)
+		comments_generator = reddit.get_subreddit('test').get_comments(limit = 50)
 		
 		print 'New comment generator fetched.'
 		
 		for comment in comments_generator:
-			idList = []	#this list is reinitialized for every comment
+			idList = [] #this list is reinitialized for every comment
 			with open('commentid.txt', 'r') as idfile:
 				idList = [line.rstrip() for line in idfile]
 			
@@ -185,7 +192,7 @@ while True:
 						reply_with_damage_table(comment, name)
 						
 					elif isDuplicate(comment, name):
-						comment.reply("It appears that the information for " + name.title() + " has already been posted somewhere in this thread.  \n\nUse Ctrl+F, or if you're on a Mac, Cmd+F to look for the relevant information.  \n* * *   \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Will delete post if score is below 0.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
+						comment.reply("It appears that the information for " + name.title() + " has already been posted somewhere in this thread.  \n\nUse Ctrl+F, or if you're on a Mac, Cmd+F to look for the relevant information.")
 						print 'There is already a post in this submission with this information (' + name + ').'
 						logCommentId(comment)
 						print 'Sleeping for 2 minutes, starting %s' % datetime.datetime.now().time()
