@@ -32,11 +32,10 @@ monsterList = ["great-jaggi", "great-baggi", "great-wroggi", "arzuros", "lagombi
 "hallowed-jhen-mohran", "alatreon", "dire-miralis"]
 
 #Steve code. Delete this block when removing Steve feature.
-SteveName = '**[Steve](http://i.imgur.com/dzDS5WL.jpg)**'
-Steve1 = SteveName + '  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|12|0|3|0|0|17|0|0  \nNeck|180|4|20|0|0|17|0|4  \nBack|44|44|10|0|0|17|0|0  \nBelly|4|5|10|0|0|17|0|0  \nFront Leg|13|12|11|0|0|17|0|1  \nBack Leg|31|21|11|0|0|17|0|0  \nTail|1|3|3|7|0|17|0|1  \n\nSteve is too pretty for you.'
-Steve2 = SteveName + '  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|15|40|30|0|30|10|25|0  \nNeck|50|20|20|0|15|5|10|5  \nBack|10|15|10|0|30|0|15|0  \nBelly|40|50|30|0|10|5|20|5  \nFront Leg|30|40|55|0|25|5|15|0  \nBack Leg|31|21|11|0|0|17|0|10  \nTail|15|10|10|0|35|5|10|0  \n\n#STEVE4PRESIDENT'  
-Steve3 = SteveName + '  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|1|1|1|0|0|0|0|0  \nNeck|0|0|0|0|0|0|0|0  \nBack|0|0|0|0|0|0|0|0  \nBelly|0|0|0|0|0|0|0|0  \nFront Leg|0|0|0|0|0|0|0|0  \nBack Leg|0|0|0|0|0|0|0|0  \nTail|0|0|0|0|0|0|0|0  \n\nSteve is full of sadness and cereal.'
-Steve4 = SteveName + '  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|0|0|0|0|0|0|0|0  \nNeck|0|0|0|0|0|0|0|0  \nBack|0|0|0|0|0|0|0|0  \nBelly|0|0|0|0|0|0|0|0  \nFront Leg|0|0|0|0|0|0|0|0  \nBack Leg|100|100|100|50|50|0|50|50  \nTail|100|100|100|50|50|0|50|50  \n\nSteve is a big booty bitch.'
+Steve1 = '**[Steve](http://i.imgur.com/iCOPN.jpg)**  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|12|0|3|0|0|17|0|0  \nNeck|180|4|20|0|0|17|0|4  \nBack|44|44|10|0|0|17|0|0  \nBelly|4|5|10|0|0|17|0|0  \nFront Leg|13|12|11|0|0|17|0|1  \nBack Leg|31|21|11|0|0|17|0|0  \nTail|1|3|3|7|0|17|0|1  \n\nSteve is too pretty for you.'
+Steve2 = '**[Steve](http://i.imgur.com/7SNVtkp.jpg)**  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|15|40|30|0|30|10|25|0  \nNeck|50|20|20|0|15|5|10|5  \nBack|10|15|10|0|30|0|15|0  \nBelly|40|50|30|0|10|5|20|5  \nFront Leg|30|40|55|0|25|5|15|0  \nBack Leg|31|21|11|0|0|17|0|10  \nTail|15|10|10|0|35|5|10|0  \n\n#STEVE4PRESIDENT'  
+Steve3 = '**[Steve](http://i.imgur.com/O1iVTda.jpg)**  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|1|1|1|0|0|0|0|0  \nNeck|0|0|0|0|0|0|0|0  \nBack|0|0|0|0|0|0|0|0  \nBelly|0|0|0|0|0|0|0|0  \nFront Leg|0|0|0|0|0|0|0|0  \nBack Leg|0|0|0|0|0|0|0|0  \nTail|0|0|0|0|0|0|0|0  \n\nSteve is full of sadness and cereal.'
+Steve4 = '**[Steve](http://i.imgur.com/snONC83.jpg)**  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|0|0|0|0|0|0|0|0  \nNeck|0|0|0|0|0|0|0|0  \nBack|0|0|0|0|0|0|0|0  \nBelly|0|0|0|0|0|0|0|0  \nFront Leg|0|0|0|0|0|0|0|0  \nBack Leg|100|100|100|50|50|0|50|50  \nTail|100|100|100|50|50|0|50|50  \n\nSteve is a big booty bitch.'
 
 SteveList = [Steve1, Steve2, Steve3, Steve4]
 
@@ -47,6 +46,7 @@ SteveList = [Steve1, Steve2, Steve3, Steve4]
 #############	
 # FUNCTIONS #
 #############
+
 def sleep(seconds): #use this for extra verbosity in the command line
 	print 'Sleeping for ' + str(seconds) + ' seconds, starting %s' % datetime.datetime.now().time()
 	time.sleep(seconds)
@@ -188,7 +188,6 @@ while True:
 		check_scores()
 		#Do NOT run this bot in /r/MonsterHunter: /u/MonsterInfoBot is already running!
 		comments_generator = reddit.get_subreddit('test').get_comments(limit = 50)
-		
 		print 'New comment generator fetched.'
 		
 		for comment in comments_generator:
