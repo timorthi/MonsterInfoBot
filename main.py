@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-import praw, re, time, datetime, urllib2, sys, os
+import praw, re, time, datetime, urllib2, sys, os, random
 
 # @([\w-]+[LHG]) : regex for low, high, G rank carves. Syntax: @dire-miralis-G / @barioth-L
 
@@ -30,7 +30,16 @@ monsterList = ["great-jaggi", "great-baggi", "great-wroggi", "arzuros", "lagombi
 "green-nargacuga", "lucent-nargacuga", "zinogre", "stygian-zinogre", "plesioth", "green-plesioth",
 "brachydios", "ceadeus", "goldbeard-ceadeus", "deviljho", "savage-deviljho", "jhen-mohran", 
 "hallowed-jhen-mohran", "alatreon", "dire-miralis"]
-	
+
+#Steve code. Delete this block when removing Steve feature.
+SteveName = '**[Steve](http://i.imgur.com/dzDS5WL.jpg)**'
+Steve1 = SteveName + '  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|12|0|3|0|0|17|0|0  \nNeck|180|4|20|0|0|17|0|4  \nBack|44|44|10|0|0|17|0|0  \nBelly|4|5|10|0|0|17|0|0  \nFront Leg|13|12|11|0|0|17|0|1  \nBack Leg|31|21|11|0|0|17|0|0  \nTail|1|3|3|7|0|17|0|1  \n\nSteve is too pretty for you.'
+Steve2 = SteveName + '  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|15|40|30|0|30|10|25|0  \nNeck|50|20|20|0|15|5|10|5  \nBack|10|15|10|0|30|0|15|0  \nBelly|40|50|30|0|10|5|20|5  \nFront Leg|30|40|55|0|25|5|15|0  \nBack Leg|31|21|11|0|0|17|0|10  \nTail|15|10|10|0|35|5|10|0  \n\n#STEVE4PRESIDENT'  
+Steve3 = SteveName + '  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|1|1|1|0|0|0|0|0  \nNeck|0|0|0|0|0|0|0|0  \nBack|0|0|0|0|0|0|0|0  \nBelly|0|0|0|0|0|0|0|0  \nFront Leg|0|0|0|0|0|0|0|0  \nBack Leg|0|0|0|0|0|0|0|0  \nTail|0|0|0|0|0|0|0|0  \n\nSteve is full of sadness and cereal.'
+Steve4 = SteveName + '  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|0|0|0|0|0|0|0|0  \nNeck|0|0|0|0|0|0|0|0  \nBack|0|0|0|0|0|0|0|0  \nBelly|0|0|0|0|0|0|0|0  \nFront Leg|0|0|0|0|0|0|0|0  \nBack Leg|100|100|100|50|50|0|50|50  \nTail|100|100|100|50|50|0|50|50  \n\nSteve is a big booty bitch.'
+
+SteveList = [Steve1, Steve2, Steve3, Steve4]
+
 ##############	
 # END CONFIG #
 ##############
@@ -38,6 +47,10 @@ monsterList = ["great-jaggi", "great-baggi", "great-wroggi", "arzuros", "lagombi
 #############	
 # FUNCTIONS #
 #############
+def sleep(seconds): #use this for extra verbosity in the command line
+	print 'Sleeping for ' + str(seconds) + ' seconds, starting %s' % datetime.datetime.now().time()
+	time.sleep(seconds)
+
 def login():
 	TryingLogin = True
 	while TryingLogin:
@@ -55,49 +68,44 @@ def login():
 		
 		except Exception as e:
 			if 'ratelimit' in e:
-				print 'You tried logging in too many times in a short interval. Try again in 45 seconds, from %s' % datetime.datetime.now().time()
-				time.sleep(45)
+				print 'You tried logging in too many times in a short interval. Try again.'
+				sleep(45)
 			else:
 				print 'Exception: %s. Trying again.' % e
 				time.sleep(2)
 
-
 def get_monster_damage(monstername): 
 	while True:
 		try:
-			monstername = monstername.lower() #must be lowercase or Kiranico's analytics goes crazy
+			monstername = monstername.lower() #must be lowercase or Kiranico's analytics go crazy
 			text = []
 			print 'Getting source code from Kiranico..'
 			site = 'http://www.kiranico.com/monster/%s' % monstername
-			request = urllib2.Request(site, headers=hdr) 
-			connect = urllib2.urlopen(request)
-			soup = BeautifulSoup(connect)
+			soup = BeautifulSoup(urllib2.urlopen(urllib2.Request(site, headers=hdr)))
 			print 'Site source obtained for %s' % monstername
 			damageTable = soup.find('div', id='damage-chart-panel').findAll('tr')
 			for tr in damageTable:
-				tags = '<[^>]+>' #pattern for <anything enclosed in these things>
 				raw = str(tr)
-				sub1 = re.sub(tags, '|', raw)
-				sub2 = re.sub('\n\|', ' ', sub1)
-				row = re.sub('\xe2\x80\x94', '-', sub2)
+				sub1 = re.sub('<[^>]+>', '|', raw) #replace <anything enclosed in these things> with pipes (|)
+				sub2 = re.sub('\n\|', ' ', sub1) #adhering to markdown formatting
+				row = re.sub('\xe2\x80\x94', '-', sub2) #unicode to ASCII
 				row = row[1:-2] #get rid of some of the extra pipes (|) 
 				text.append(row)
 			return text
 			
 		except urllib2.URLError:
-			print 'URLError raised. Could not get site source. Trying again in 5 minutes..'
-			time.sleep(300)
+			print 'URLError. Could not get site source.'
+			sleep(300)
 			continue	
 			
 		except urllib2.HTTPError:
-			print 'HTTPError raised. Could not get site source. Trying again in 5 minutes..'
-			time.sleep(300)
+			print 'HTTPError. Could not get site source.'
+			sleep(300)
 			continue
 			
 def check_scores():
 	print 'Checking scores..'
-	me = reddit.get_redditor(bot_user)
-	myComments = me.get_comments(limit=100)
+	myComments = reddit.get_redditor(bot_user).get_comments(limit=100)
 	for post in myComments:
 		if post.score<=(-1):
 			post.delete()
@@ -114,13 +122,13 @@ def logCommentId(comment):
 	if os.path.isfile('commentid.txt'):
 		with open('commentid.txt', 'a') as idfile:
 			idfile.write(comment.id+'\n')
-		print "Comment ID stored."
+		print "Comment ID (%s) stored." % comment.id
 	else:
 		open('commentid.txt', 'w').close()
 		print 'commentid.txt could not be found. File created.'
 		with open('commentid.txt', 'a') as idfile:
 			idfile.write(comment.id+'\n')
-		print "Comment ID stored."
+		print "Comment ID (%s) stored." % comment.id
 
 def reply_with_damage_table(comment, name):
 	print "Found match to monster list."
@@ -137,24 +145,33 @@ def reply_with_damage_table(comment, name):
 	comment.reply("**[" + name.title() + "](http://www.kiranico.com/monster/" + name.lower() + ")**  \n\n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Will delete post if score is below 0.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
 	print "Replied."
 	logCommentId(comment)
-	print "Sleeping for 2 minutes, starting %s" % datetime.datetime.now().time()
-	time.sleep(120)
+	sleep(120)
 		
 def logInvalidMonster(comment, name):
 	print "Name does not exist in monster list. String entered: " + name
 	logCommentId(comment)
-	print "Sleeping for 15 seconds, starting %s" % datetime.datetime.now().time()
-	time.sleep(15)
+	sleep(10)
 	
 def isDuplicate(comment, name):
-	tree = comment.submission.comments
-	flat_tree = praw.helpers.flatten_tree(tree, nested_attr=u'replies', depth_first=False)
+	flat_tree = praw.helpers.flatten_tree(comment.submission.comments, nested_attr=u'replies', depth_first=False)
 	
 	for comm in flat_tree:
 		subspecies = re.search('(?=(-'+name+'))', comm.body, re.IGNORECASE)
 		if comm.author.name in ["MonsterInfoBot", bot_user] and name in comm.body and comm != comment and not subspecies:
 			return True
+
+def too_many_steves(comment): #Steve code. Delete this function when removing Steve feature.
+	steve_count = 0
+	flat_tree = praw.helpers.flatten_tree(comment.submission.comments, nested_attr=u'replies', depth_first=False)
+	
+	for comm in flat_tree:
+		if comm.author.name in ["MonsterInfoBot", bot_user]:
+			its_steve = re.search('steve', comm.body, re.IGNORECASE)
+			if its_steve:
+				steve_count += 1
 			
+	if steve_count == 3:
+		return True
 
 #################	
 # END FUNCTIONS #
@@ -169,7 +186,7 @@ login()
 while True:
 	try:
 		check_scores()
-		#Fellow programmers - do NOT run this bot in /r/MonsterHunter: /u/MonsterInfoBot is already running!
+		#Do NOT run this bot in /r/MonsterHunter: /u/MonsterInfoBot is already running!
 		comments_generator = reddit.get_subreddit('test').get_comments(limit = 50)
 		
 		print 'New comment generator fetched.'
@@ -180,8 +197,26 @@ while True:
 				idList = [line.rstrip() for line in idfile]
 			
 			searchObject = find_tagged_monster_name(comment)
+			Steve = re.search('@Steve', comment.body, re.IGNORECASE) #Steve code. Delete this block when removing Steve feature.
 			
-			if searchObject and comment.id not in idList and comment.author.name not in ["MonsterInfoBot", bot_user]:
+			if Steve and comment.id not in idList and comment.author.name not in ["MonsterInfoBot", bot_user]:
+				print 'We found Steve!'
+				too_many_steves(comment)
+				
+				if not too_many_steves(comment):
+					random.shuffle(SteveList)
+					comment.reply(SteveList[0])
+					print comment.author.name + ' now knows what Steve is all about.'
+					logCommentId(comment)
+					sleep(120)
+					
+				elif too_many_steves(comment):
+					comment.reply('There\'s too much of Steve in this submission, man. Sorry :(')
+					print 'Steve overload!'
+					logCommentId(comment)
+					sleep(120)
+					
+			elif searchObject and comment.id not in idList and comment.author.name not in ["MonsterInfoBot", bot_user]:
 				print 'Found word with @ prefix.'
 				name = searchObject.group(1).lower()
 				
@@ -192,11 +227,10 @@ while True:
 						reply_with_damage_table(comment, name)
 						
 					elif isDuplicate(comment, name):
-						comment.reply("It appears that the information for " + name.title() + " has already been posted somewhere in this thread.  \n\nUse Ctrl+F, or if you're on a Mac, Cmd+F to look for the relevant information.")
+						comment.reply("There is already a post in this submission with information on " + name.title() + ".  \n\nUse Ctrl/Cmd+F to look for the relevant information.")
 						print 'There is already a post in this submission with this information (' + name + ').'
 						logCommentId(comment)
-						print 'Sleeping for 2 minutes, starting %s' % datetime.datetime.now().time()
-						time.sleep(120)
+						sleep(120)
 									
 				else:
 					logInvalidMonster(comment, name)
@@ -210,20 +244,13 @@ while True:
 					
 				#Comment has already been processed
 				elif comment.id in idList:
-					print 'Comment already in ID list. Trying next comment..'
+					print 'Comment already in ID list (%s). Trying next comment..' % comment.id
 					time.sleep(2)
-	
-	except urllib2.HTTPError as e:
-		print "Could not connect to Reddit (%s). Sleeping for 3 minutes." % e.code
-		print 'Time: %s' % datetime.datetime.now().time()
-		time.sleep(180)
-		continue
 				
 	#TODO: Catching all exceptions is a faux-pas. Rewrite this!
 	except Exception as e:
-		print 'Error: %s. Sleeping for 3 minutes.' % e
-		print 'Time: %s' % datetime.datetime.now().time()
-		time.sleep(180)
+		print 'Error: %s.' % e
+		sleep(180)
 		continue
 		
 #################
