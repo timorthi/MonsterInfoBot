@@ -36,7 +36,7 @@ Changelog
 - Added functionality where bot deletes post if comment score <=-1.  
 
 **4.8.14**  
-- Creates commentid.txt if not found in local directory.  
+- Creates `commentid.txt` if not found in local directory.  
 
 Merged pull request by icbat:  
 - Factoring out code and placed them into functions
@@ -49,7 +49,7 @@ Merged pull request by icbat:
 
 **4.19.14**
 - Bot no longer replies with duplicate information. 
-- Replaced get_comments with comment_stream.
+- Replaced `get_comments with` `comment_stream`.
 - Bot will retry connection if connection to Reddit/Kiranico fails.  
 
 **4.20.14**  
@@ -58,9 +58,13 @@ Merged pull request by icbat:
 - Created .gitignore.  
 
 **4.24.14**  
-- Reverted back to get_comments from comment_stream as it was interfering with check_scores.  
+- Reverted back to `get_comments` from `comment_stream` as it was interfering with `check_scores`.  
 - Shortened reply for duplicate posts to prevent page bloat.  
-- Removed bigmonster.txt dependency; monster list is now initialized in program.
+- Removed `bigmonster.txt` dependency; monster list is now initialized in program.  
+
+**4.25.14**  
+- Steve is here!  
+- Removed some redundant lines of code at the cost of some readability.
 
 To Do
 ===============
