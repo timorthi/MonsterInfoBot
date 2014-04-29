@@ -33,7 +33,7 @@ monsterList = ["great-jaggi", "great-baggi", "great-wroggi", "arzuros", "lagombi
 
 #Steve code. Delete this block when removing Steve feature.
 Steve1 = '**[Steve](http://i.imgur.com/iCOPN.jpg)**  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|12|0|3|0|0|17|0|0  \nNeck|180|4|20|0|0|17|0|4  \nBack|44|44|10|0|0|17|0|0  \nBelly|4|5|10|0|0|17|0|0  \nFront Leg|13|12|11|0|0|17|0|1  \nBack Leg|31|21|11|0|0|17|0|0  \nTail|1|3|3|7|0|17|0|1  \n\nSteve is too pretty for you.'
-Steve2 = '**[Steve](http://i.imgur.com/7SNVtkp.jpg)**  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|15|40|30|0|30|10|25|0  \nNeck|50|20|20|0|15|5|10|5  \nBack|10|15|10|0|30|0|15|0  \nBelly|40|50|30|0|10|5|20|5  \nFront Leg|30|40|55|0|25|5|15|0  \nBack Leg|31|21|11|0|0|17|0|10  \nTail|15|10|10|0|35|5|10|0  \n\n#STEVE4PRESIDENT'  
+Steve2 = '**[Steve](http://i.imgur.com/7SNVtkp.jpg)**  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|15|40|30|0|30|10|25|0  \nNeck|50|20|20|0|15|5|10|5  \nBack|10|15|10|0|30|0|15|0  \nBelly|40|50|30|0|10|5|20|5  \nFront Leg|30|40|55|0|25|5|15|0  \nBack Leg|31|21|11|0|0|17|0|10  \nTail|15|10|10|0|35|5|10|0  \n\n\#STEVE4PRESIDENT'  
 Steve3 = '**[Steve](http://i.imgur.com/O1iVTda.jpg)**  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|1|1|1|0|0|0|0|0  \nNeck|0|0|0|0|0|0|0|0  \nBack|0|0|0|0|0|0|0|0  \nBelly|0|0|0|0|0|0|0|0  \nFront Leg|0|0|0|0|0|0|0|0  \nBack Leg|0|0|0|0|0|0|0|0  \nTail|0|0|0|0|0|0|0|0  \n\nSteve is full of sadness and cereal.'
 Steve4 = '**[Steve](http://i.imgur.com/snONC83.jpg)**  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|0|0|0|0|0|0|0|0  \nNeck|0|0|0|0|0|0|0|0  \nBack|0|0|0|0|0|0|0|0  \nBelly|0|0|0|0|0|0|0|0  \nFront Leg|0|0|0|0|0|0|0|0  \nBack Leg|100|100|100|50|50|0|50|50  \nTail|100|100|100|50|50|0|50|50  \n\nSteve is a big booty bitch.'
 
@@ -73,6 +73,14 @@ def login():
 			else:
 				print 'Exception: %s. Trying again.' % e
 				time.sleep(2)
+				
+def replied(comment):
+	children = comment.replies
+	
+	if children:
+		for child in children:
+			if child.author.name in ["MonsterInfoBot", bot_user]:
+				return True
 
 def get_monster_damage(monstername): 
 	while True:
@@ -117,18 +125,6 @@ def check_scores():
 def find_tagged_monster_name(comment):
 	monster_name_pattern = '@' + '([\w-]+)'
 	return re.search(monster_name_pattern, comment.body, re.IGNORECASE)	
-	
-def logCommentId(comment):
-	if os.path.isfile('commentid.txt'):
-		with open('commentid.txt', 'a') as idfile:
-			idfile.write(comment.id+'\n')
-		print "Comment ID (%s) stored." % comment.id
-	else:
-		open('commentid.txt', 'w').close()
-		print 'commentid.txt could not be found. File created.'
-		with open('commentid.txt', 'a') as idfile:
-			idfile.write(comment.id+'\n')
-		print "Comment ID (%s) stored." % comment.id
 
 def reply_with_damage_table(comment, name):
 	print "Found match to monster list."
@@ -142,15 +138,9 @@ def reply_with_damage_table(comment, name):
 		else:
 			reply_string += item+'\n'
 
-	comment.reply("**[" + name.title() + "](http://www.kiranico.com/monster/" + name.lower() + ")**  \n\n" + reply_string + "  \n* * *  \n^(Summon: prefix monster name with '@'. If there is more than 1 word, substitute the space for a hyphen, e.g. @barioth, @dire-miralis.)  \n^(Will delete post if score is below 0.)  \n^(Have a bug to report/suggestion to make? Message my creator at /u/xozzo!)")
+	comment.reply("**[" + name.title() + "](http://www.kiranico.com/monster/" + name.lower() + ")**  \n\n" + reply_string + "  \n* * *  \n^^^Summon: ^^^prefix ^^^monster ^^^name ^^^with ^^^'@'. ^^^If ^^^there ^^^is ^^^more ^^^than ^^^1 ^^^word, ^^^substitute ^^^the ^^^space ^^^for ^^^a ^^^hyphen, ^^^e.g. ^^^@barioth, ^^^@dire-miralis.  \n^^^Automatically ^^^deletes ^^^if ^^^comment ^^^score ^^^falls ^^^below ^^^0.  \n[^^^Author](/u/xozzo) ^^^| [^^^Source](https://github.com/xozzo/MonsterInfoBot)")
 	print "Replied."
-	logCommentId(comment)
 	sleep(120)
-		
-def logInvalidMonster(comment, name):
-	print "Name does not exist in monster list. String entered: " + name
-	logCommentId(comment)
-	sleep(10)
 	
 def isDuplicate(comment, name):
 	flat_tree = praw.helpers.flatten_tree(comment.submission.comments, nested_attr=u'replies', depth_first=False)
@@ -191,14 +181,11 @@ while True:
 		print 'New comment generator fetched.'
 		
 		for comment in comments_generator:
-			idList = [] #this list is reinitialized for every comment
-			with open('commentid.txt', 'r') as idfile:
-				idList = [line.rstrip() for line in idfile]
-			
+			replied(comment)
 			searchObject = find_tagged_monster_name(comment)
 			Steve = re.search('@Steve', comment.body, re.IGNORECASE) #Steve code. Delete this block when removing Steve feature.
 			
-			if Steve and comment.id not in idList and comment.author.name not in ["MonsterInfoBot", bot_user]:
+			if Steve and not replied(comment) and comment.author.name not in ["MonsterInfoBot", bot_user]:
 				print 'We found Steve!'
 				too_many_steves(comment)
 				
@@ -206,16 +193,14 @@ while True:
 					random.shuffle(SteveList)
 					comment.reply(SteveList[0])
 					print comment.author.name + ' now knows what Steve is all about.'
-					logCommentId(comment)
 					sleep(120)
 					
 				elif too_many_steves(comment):
-					comment.reply('There\'s too much of Steve in this submission, man. Sorry :(')
+					comment.reply('STEVE OVERLOAD!!!')
 					print 'Steve overload!'
-					logCommentId(comment)
 					sleep(120)
 					
-			elif searchObject and comment.id not in idList and comment.author.name not in ["MonsterInfoBot", bot_user]:
+			elif searchObject and not replied(comment) and comment.author.name not in ["MonsterInfoBot", bot_user]:
 				print 'Found word with @ prefix.'
 				name = searchObject.group(1).lower()
 				
@@ -228,23 +213,19 @@ while True:
 					elif isDuplicate(comment, name):
 						comment.reply("There is already a post in this submission with information on " + name.title() + ".  \n\nUse Ctrl/Cmd+F to look for the relevant information.")
 						print 'There is already a post in this submission with this information (' + name + ').'
-						logCommentId(comment)
 						sleep(120)
 									
 				else:
-					logInvalidMonster(comment, name)
+					print "Name does not exist in monster list. String entered: " + name
+					time.sleep(2)
 						
-			else:
-				#Comment has no match, or author is bot_user
-				if comment.id not in idList:
-					print 'Could not find match in comment. Trying next comment..'
-					logCommentId(comment)
-					time.sleep(2)
-					
-				#Comment has already been processed
-				elif comment.id in idList:
-					print 'Comment already in ID list (%s). Trying next comment..' % comment.id
-					time.sleep(2)
+			elif not replied(comment): #Comment has no match, or author is bot_user
+				print 'Could not find match in comment (%s). Trying next comment..' % comment.id
+				time.sleep(2)
+									
+			elif replied(comment): #Comment has already been processed
+				print 'This comment (%s) has already been replied to. Trying next comment..' % comment.id
+				time.sleep(2)
 				
 	#TODO: Catching all exceptions is a faux-pas. Rewrite this!
 	except Exception as e:
