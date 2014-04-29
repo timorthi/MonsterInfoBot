@@ -64,14 +64,16 @@ Merged pull request by icbat:
 
 **4.25.14**  
 - Steve is here!  
-- Removed some redundant lines of code at the cost of some readability.
+- Removed some redundant lines of code at the cost of some readability.  
+
+**4.29.14**  
+- Removed `commentid.txt` dependency.  
+- Removed some redundant lines of code.
 
 To Do
 ===============
-- Host bot online.
+- Host bot online on a remote server.
 - Selective information posting (carve/drop): Regex is done. Have to work on parsing the page.
-- Update bot comment to include how to summon for carve/drops when feature is done.  
-- Remove commentid.txt dependency to store processed comments.
 - Possibly ignore invalid @ names and search the rest of the comment for a valid one?  
 - Explain why there are two values in certain charts.  
 - Add tolerance chart?  
