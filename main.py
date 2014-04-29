@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-import praw, re, datetime, urllib2, random
+import praw, re, datetime, time, urllib2, random
 
 # @([\w-]+[LHG]) : regex for low, high, G rank carves. Syntax: @dire-miralis-G / @barioth-L
 
