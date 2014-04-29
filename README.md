@@ -14,7 +14,7 @@ Features
 - The bot only gives you its damage chart (hitzones and elemental weaknesses) at the moment. See below for future plans.  
 - Use `@` to prefix a monster name in your comment, e.g. `@sand-barioth`, `@lagiacrus`. It's case insensitive.  
 - One monster per comment only. Bot only reads the first '@ word' it sees - even wrong ones.  
-- The bot does not read edited comments.
+- The bot can read edited comments.
 - Large monsters only.  
 - The bot only works for MH3U monsters since Kiranico only has information for that game.  
 - The bot deletes any of its posts that has a negative comment score.  
@@ -67,7 +67,7 @@ Merged pull request by icbat:
 - Removed some redundant lines of code at the cost of some readability.  
 
 **4.29.14**  
-- Removed `commentid.txt` dependency.  
+- Removed `commentid.txt` dependency. With the new code, the bot can now process edited comments.  
 - Removed some redundant lines of code.
 
 To Do
