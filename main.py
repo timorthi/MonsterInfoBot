@@ -37,7 +37,7 @@ Steve2 = '**[Steve](http://i.imgur.com/7SNVtkp.jpg)**  \n\nPart|Cut|Impact|Shot|
 Steve3 = '**[Steve](http://i.imgur.com/O1iVTda.jpg)**  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|1|1|1|0|0|0|0|0  \nNeck|0|0|0|0|0|0|0|0  \nBack|0|0|0|0|0|0|0|0  \nBelly|0|0|0|0|0|0|0|0  \nFront Leg|0|0|0|0|0|0|0|0  \nBack Leg|0|0|0|0|0|0|0|0  \nTail|0|0|0|0|0|0|0|0  \n\nSteve is full of sadness and cereal.'
 Steve4 = '**[Steve](http://i.imgur.com/snONC83.jpg)**  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|0|0|0|0|0|0|0|0  \nNeck|0|0|0|0|0|0|0|0  \nBack|0|0|0|0|0|0|0|0  \nBelly|0|0|0|0|0|0|0|0  \nFront Leg|0|0|0|0|0|0|0|0  \nBack Leg|100|100|100|50|50|0|50|50  \nTail|100|100|100|50|50|0|50|50  \n\nSteve is a big booty bitch.'
 
-SteveList = [Steve1, Steve2, Steve3, Steve4]
+steve_list = [Steve1, Steve2, Steve3, Steve4]
 
 ##############	
 # END CONFIG #
@@ -52,8 +52,8 @@ def sleep(seconds): #use this for extra verbosity in the command line
 	time.sleep(seconds)
 
 def login():
-	TryingLogin = True
-	while TryingLogin:
+	trying_login = True
+	while trying_login:
 		try:
 			global bot_user, bot_pass
 			bot_user = raw_input("Bot username?\n> ")
@@ -61,7 +61,7 @@ def login():
 			print "Logging in.."
 			reddit.login(bot_user, bot_pass)
 			print "Successfully logged in as %s" % bot_user
-			TryingLogin = False
+			trying_login = False
 			
 		except praw.errors.InvalidUserPass:
 			print 'Username/Password is wrong. Please re-enter username and password.'
@@ -82,17 +82,17 @@ def replied(comment):
 			if child.author.name in ["MonsterInfoBot", bot_user]:
 				return True
 
-def get_monster_damage(monstername): 
+def get_monster_damage(monster_name): 
 	while True:
 		try:
-			monstername = monstername.lower() #must be lowercase or Kiranico's analytics go crazy
+			monster_name = monster_name.lower() #must be lowercase or Kiranico's analytics go crazy
 			text = []
 			print 'Getting source code from Kiranico..'
-			site = 'http://www.kiranico.com/monster/%s' % monstername
+			site = 'http://www.kiranico.com/monster/%s' % monster_name
 			soup = BeautifulSoup(urllib2.urlopen(urllib2.Request(site, headers=hdr)))
-			print 'Site source obtained for %s' % monstername
-			damageTable = soup.find('div', id='damage-chart-panel').findAll('tr')
-			for tr in damageTable:
+			print 'Site source obtained for %s' % monster_name
+			damage_table = soup.find('div', id='damage-chart-panel').findAll('tr')
+			for tr in damage_table:
 				raw = str(tr)
 				sub1 = re.sub('<[^>]+>', '|', raw) #replace <anything enclosed in these things> with pipes (|)
 				sub2 = re.sub('\n\|', ' ', sub1) #adhering to markdown formatting
@@ -113,8 +113,8 @@ def get_monster_damage(monstername):
 			
 def check_scores():
 	print 'Checking scores..'
-	myComments = reddit.get_redditor(bot_user).get_comments(limit=100)
-	for post in myComments:
+	my_comments = reddit.get_redditor(bot_user).get_comments(limit=100)
+	for post in my_comments:
 		if post.score<=(-1):
 			post.delete()
 			print 'Post deleted.'
@@ -142,7 +142,7 @@ def reply_with_damage_table(comment, name):
 	print "Replied."
 	sleep(120)
 	
-def isDuplicate(comment, name):
+def is_duplicate(comment, name):
 	flat_tree = praw.helpers.flatten_tree(comment.submission.comments, nested_attr=u'replies', depth_first=False)
 	
 	for comm in flat_tree:
@@ -182,7 +182,7 @@ while True:
 		
 		for comment in comments_generator:
 			replied(comment)
-			searchObject = find_tagged_monster_name(comment)
+			search_object = find_tagged_monster_name(comment)
 			Steve = re.search('@Steve', comment.body, re.IGNORECASE) #Steve code. Delete this block when removing Steve feature.
 			
 			if Steve and not replied(comment) and comment.author.name not in ["MonsterInfoBot", bot_user]:
@@ -190,8 +190,8 @@ while True:
 				too_many_steves(comment)
 				
 				if not too_many_steves(comment):
-					random.shuffle(SteveList)
-					comment.reply(SteveList[0])
+					random.shuffle(steve_list)
+					comment.reply(steve_list[0])
 					print comment.author.name + ' now knows what Steve is all about.'
 					sleep(120)
 					
@@ -200,17 +200,17 @@ while True:
 					print 'Steve overload!'
 					sleep(120)
 					
-			elif searchObject and not replied(comment) and comment.author.name not in ["MonsterInfoBot", bot_user]:
+			elif search_object and not replied(comment) and comment.author.name not in ["MonsterInfoBot", bot_user]:
 				print 'Found word with @ prefix.'
-				name = searchObject.group(1).lower()
+				name = search_object.group(1).lower()
 				
 				if name in monsterList:
-					isDuplicate(comment, name)
+					is_duplicate(comment, name)
 					
-					if not isDuplicate(comment, name):
+					if not is_duplicate(comment, name):
 						reply_with_damage_table(comment, name)
 						
-					elif isDuplicate(comment, name):
+					elif is_duplicate(comment, name):
 						comment.reply("There is already a post in this submission with information on " + name.title() + ".  \n\nUse Ctrl/Cmd+F to look for the relevant information.")
 						print 'There is already a post in this submission with this information (' + name + ').'
 						sleep(120)
