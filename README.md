@@ -5,9 +5,7 @@ MonsterInfoBot
 
 A reddit bot for /r/MonsterHunter that filters comments for @monster-names and fetches relevant information from kiranico.com  
 
-**There is already an instance of the bot running in /r/MonsterHunter. If you want to test it, use /r/test instead. The code uses /r/test by default.**  
-
-There is no need for you to edit `commentid.txt`: it stores the proccessed comment IDs. If it (`commentid.txt`) does not exist, the program will create one for you.  
+**This bot is no longer in use.**  
 
 Features
 ===============  
@@ -68,16 +66,18 @@ Merged pull request by icbat:
 
 **4.29.14**  
 - Removed `commentid.txt` dependency. With the new code, the bot can now process edited comments.  
-- Removed some redundant lines of code.
+- Removed some redundant lines of code.  
+
+**3.30.16**  
+- Removed 'Steve' code and other clutter.  
+- Updated license year.  
+- Updated TODO
 
 To Do
 ===============
 - Host bot online on a remote server.
-- Selective information posting (carve/drop): Regex is done. Have to work on parsing the page.
 - Possibly ignore invalid @ names and search the rest of the comment for a valid one?  
 - Explain why there are two values in certain charts.  
-- Add tolerance chart?  
-- Add general tips?  
 
 Contributors
 ===============
