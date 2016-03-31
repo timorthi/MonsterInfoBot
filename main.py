@@ -1,8 +1,6 @@
 from bs4 import BeautifulSoup
 import praw, re, datetime, time, urllib2, random
 
-# @([\w-]+[LHG]) : regex for low, high, G rank carves. Syntax: @dire-miralis-G / @barioth-L
-
 ##########
 # CONFIG #
 ##########
@@ -30,14 +28,6 @@ monsterList = ["great-jaggi", "great-baggi", "great-wroggi", "arzuros", "lagombi
 "green-nargacuga", "lucent-nargacuga", "zinogre", "stygian-zinogre", "plesioth", "green-plesioth",
 "brachydios", "ceadeus", "goldbeard-ceadeus", "deviljho", "savage-deviljho", "jhen-mohran", 
 "hallowed-jhen-mohran", "alatreon", "dire-miralis"]
-
-#Steve code. Delete this block when removing Steve feature.
-Steve1 = '**[Steve](http://i.imgur.com/iCOPN.jpg)**  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|12|0|3|0|0|17|0|0  \nNeck|180|4|20|0|0|17|0|4  \nBack|44|44|10|0|0|17|0|0  \nBelly|4|5|10|0|0|17|0|0  \nFront Leg|13|12|11|0|0|17|0|1  \nBack Leg|31|21|11|0|0|17|0|0  \nTail|1|3|3|7|0|17|0|1  \n\nSteve is too pretty for you.'
-Steve2 = '**[Steve](http://i.imgur.com/7SNVtkp.jpg)**  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|15|40|30|0|30|10|25|0  \nNeck|50|20|20|0|15|5|10|5  \nBack|10|15|10|0|30|0|15|0  \nBelly|40|50|30|0|10|5|20|5  \nFront Leg|30|40|55|0|25|5|15|0  \nBack Leg|31|21|11|0|0|17|0|10  \nTail|15|10|10|0|35|5|10|0  \n\n\#STEVE4PRESIDENT'  
-Steve3 = '**[Steve](http://i.imgur.com/O1iVTda.jpg)**  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|1|1|1|0|0|0|0|0  \nNeck|0|0|0|0|0|0|0|0  \nBack|0|0|0|0|0|0|0|0  \nBelly|0|0|0|0|0|0|0|0  \nFront Leg|0|0|0|0|0|0|0|0  \nBack Leg|0|0|0|0|0|0|0|0  \nTail|0|0|0|0|0|0|0|0  \n\nSteve is full of sadness and cereal.'
-Steve4 = '**[Steve](http://i.imgur.com/snONC83.jpg)**  \n\nPart|Cut|Impact|Shot|Fir|Wat|Ice|Thun|Dra  \n|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|  \nHead|0|0|0|0|0|0|0|0  \nNeck|0|0|0|0|0|0|0|0  \nBack|0|0|0|0|0|0|0|0  \nBelly|0|0|0|0|0|0|0|0  \nFront Leg|0|0|0|0|0|0|0|0  \nBack Leg|100|100|100|50|50|0|50|50  \nTail|100|100|100|50|50|0|50|50  \n\nSteve is a big booty bitch.'
-
-steve_list = [Steve1, Steve2, Steve3, Steve4]
 
 ##############	
 # END CONFIG #
@@ -150,19 +140,6 @@ def is_duplicate(comment, name):
 		if comm.author.name in ["MonsterInfoBot", bot_user] and name in comm.body and comm != comment and not subspecies:
 			return True
 
-def too_many_steves(comment): #Steve code. Delete this function when removing Steve feature.
-	steve_count = 0
-	flat_tree = praw.helpers.flatten_tree(comment.submission.comments, nested_attr=u'replies', depth_first=False)
-	
-	for comm in flat_tree:
-		if comm.author.name in ["MonsterInfoBot", bot_user]:
-			its_steve = re.search('steve', comm.body, re.IGNORECASE)
-			if its_steve:
-				steve_count += 1
-			
-	if steve_count == 3:
-		return True
-
 #################	
 # END FUNCTIONS #
 #################
@@ -183,24 +160,8 @@ while True:
 		for comment in comments_generator:
 			replied(comment)
 			search_object = find_tagged_monster_name(comment)
-			Steve = re.search('@Steve', comment.body, re.IGNORECASE) #Steve code. Delete this block when removing Steve feature.
-			
-			if Steve and not replied(comment) and comment.author.name not in ["MonsterInfoBot", bot_user]:
-				print 'We found Steve!'
-				too_many_steves(comment)
-				
-				if not too_many_steves(comment):
-					random.shuffle(steve_list)
-					comment.reply(steve_list[0])
-					print comment.author.name + ' now knows what Steve is all about.'
-					sleep(120)
 					
-				elif too_many_steves(comment):
-					comment.reply('STEVE OVERLOAD!!!')
-					print 'Steve overload!'
-					sleep(120)
-					
-			elif search_object and not replied(comment) and comment.author.name not in ["MonsterInfoBot", bot_user]:
+			if search_object and not replied(comment) and comment.author.name not in ["MonsterInfoBot", bot_user]:
 				print 'Found word with @ prefix.'
 				name = search_object.group(1).lower()
 				
@@ -227,7 +188,6 @@ while True:
 				print 'This comment (%s) has already been replied to. Trying next comment..' % comment.id
 				time.sleep(2)
 				
-	#TODO: Catching all exceptions is a faux-pas. Rewrite this!
 	except Exception as e:
 		print 'Error: %s.' % e
 		sleep(180)
