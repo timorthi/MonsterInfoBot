@@ -42,6 +42,9 @@ def sleep(seconds): #use this for extra verbosity in the command line
 	time.sleep(seconds)
 
 def login():
+	"""
+	Logs in to Reddit via the command line. This will be the bot account.
+	"""
 	trying_login = True
 	while trying_login:
 		try:
@@ -65,6 +68,11 @@ def login():
 				time.sleep(2)
 				
 def replied(comment):
+	"""
+	Takes a comment object as an argument. Returns `True` if any of its child
+	comments are replied to by "MonsterInfoBot" or whatever the current user
+	is.
+	"""
 	children = comment.replies
 	
 	if children:
@@ -72,10 +80,16 @@ def replied(comment):
 			if child.author.name in ["MonsterInfoBot", bot_user]:
 				return True
 
-def get_monster_damage(monster_name): 
+def get_monster_damage(monster_name):
+	"""
+	Takes a monster name as an argument, looks it up on Kiranico and scrapes
+	the resulting page for the damage chart. Using regex, convert HTML
+	to Reddit-appropriate Markdown. Returns a list where each element
+	represents a row in the damage chart.
+	"""
 	while True:
 		try:
-			monster_name = monster_name.lower() #must be lowercase or Kiranico's analytics go crazy
+			monster_name = monster_name.lower() #must be lowercase or Kiranico's analytics will be affected
 			text = []
 			print 'Getting source code from Kiranico..'
 			site = 'http://www.kiranico.com/monster/%s' % monster_name
@@ -102,6 +116,10 @@ def get_monster_damage(monster_name):
 			continue
 			
 def check_scores():
+	"""
+	Checks if any of the comments made by the bot falls below -1. Deletes
+	the comment if true.
+	"""
 	print 'Checking scores..'
 	my_comments = reddit.get_redditor(bot_user).get_comments(limit=100)
 	for post in my_comments:
@@ -113,10 +131,19 @@ def check_scores():
 	time.sleep(2)
 
 def find_tagged_monster_name(comment):
+	"""
+	Takes a comment object as an argument. Returns the result of a regex
+	search on the comment body for anything with the syntax @monster_name.
+	"""
 	monster_name_pattern = '@' + '([\w-]+)'
 	return re.search(monster_name_pattern, comment.body, re.IGNORECASE)	
 
 def reply_with_damage_table(comment, name):
+	"""
+	Takes a comment object and monster name as arguments. Generates a reply
+	in appropriate Reddit formatting and replies to the comment that summoned
+	the bot.
+	"""
 	print "Found match to monster list."
 	reply_string = ''
 	monster_damage = get_monster_damage(name.lower())
@@ -133,6 +160,19 @@ def reply_with_damage_table(comment, name):
 	sleep(120)
 	
 def is_duplicate(comment, name):
+	"""
+	Takes a comment object and monster name as arguments. Check if the bot
+	has already posted the chart for the given monster in the current
+	submission. Iterating through the submission's comments 
+	using the following conditions for each comment:
+		1. Bot has replied to this comment.
+		2. Monster name is in comment body.
+		3. This comment is not the comment in which the function is checking against.
+		4. The regex search for a subspecies "-monster_name" returns false.
+		
+	If all of these conditions are met, then `comment` is a duplicate and the
+	function returns `True`.
+	"""
 	flat_tree = praw.helpers.flatten_tree(comment.submission.comments, nested_attr=u'replies', depth_first=False)
 	
 	for comm in flat_tree:
