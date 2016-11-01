@@ -1,11 +1,11 @@
+**UPDATE (2015): Because Kiranico's site structure has changed, this program/bot no longer works as intended. A newer, better version of this bot will be written once Kiranico releases a developer API.**  
+
 MonsterInfoBot
 ===============  
 
 **[Reddit Link](http://www.reddit.com/r/MonsterHunter/comments/229ljg/introducing_umonsterinfobot/)**  
 
 A reddit bot for /r/MonsterHunter that filters comments for @monster-names and fetches relevant information from kiranico.com  
-
-**This bot is no longer in use.**  
 
 Features
 ===============  
@@ -46,7 +46,7 @@ Merged pull request by icbat:
 - Changed some console logs to improve comprehensibility  
 
 **4.19.14**
-- Bot no longer replies with duplicate information. 
+- Bot no longer replies with duplicate information.
 - Replaced `get_comments with` `comment_stream`.
 - Bot will retry connection if connection to Reddit/Kiranico fails.  
 
